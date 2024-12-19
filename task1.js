@@ -23,3 +23,21 @@ asyncFind = (array, asyncCallback, finalCallback) => {
 
     processNext();
 }
+
+//demo case
+demo = () => {
+    const data = [-10, 2, 3, 4, 5,];
+
+    const isGreaterThanThree = (num, index, array, callback) => {
+        setTimeout(() => {
+            callback(null, num > 3);
+        }, 200);
+    };
+
+    console.log("Finding element greater than 3...");
+    asyncFind(data, isGreaterThanThree, (error, result) => {
+        console.log(`Error: ${error}, Result: ${result}`)
+    });
+}
+
+demo();
