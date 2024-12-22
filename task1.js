@@ -1,7 +1,7 @@
-asyncFind = (array, asyncCallback, finalCallback) => {
+const asyncFind = (array, asyncCallback, finalCallback) => {
     let index = 0;
 
-    processNext = () => {
+    const processNext = () => {
         if (index >= array.length) {
             return finalCallback(undefined);
         }
@@ -25,7 +25,7 @@ asyncFind = (array, asyncCallback, finalCallback) => {
 }
 
 //demo case
-demo = () => {
+const demo = () => {
     const data = [-10, 2, 3, 4, 5,];
 
     const isGreaterThanThree = (num, index, array, callback) => {
