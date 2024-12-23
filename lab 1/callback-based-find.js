@@ -2,25 +2,24 @@ const asyncFind = (array, asyncCallback, finalCallback) => {
     let index = 0;
 
     const processNext = () => {
+        const element = array[index];
+
         if (index >= array.length) {
             return finalCallback(undefined);
         }
 
-        const element = array[index];
         asyncCallback(element, index, array, (error, result) => {
             if (error) {
                 return finalCallback(error);
             }
-
             if (result) {
-                finalCallback(null, element);
-            } else {
-                index++;
-                processNext();
+                return finalCallback(null, element);
             }
+            
+            index++;
+            processNext();
         });
     }
-
     processNext();
 }
 
@@ -34,7 +33,6 @@ const demo = () => {
         }, 200);
     };
 
-    console.log("Finding element greater than 3...");
     asyncFind(data, isGreaterThanThree, (error, result) => {
         console.log(`Error: ${error}, Result: ${result}`)
     });

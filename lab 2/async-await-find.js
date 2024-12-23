@@ -1,41 +1,26 @@
-const asyncFind = (array, predicate) => {
-    return new Promise((resolve, reject) => {
-        const processNext = (index) => {
-            const element = array[index];
-
-            if (index >= array.length) {
-                return resolve(undefined);
-            }
-
-            Promise.resolve(predicate(element, index, array))
-                .then((result) => {
-                    if (result) {
-                        resolve(element);
-                    } else {
-                        processNext(index + 1);
-                    }
-                })
-                .catch(reject);
-        };
-
-        processNext(0);
-    });
+const asyncFind = async (array, predicate) => {
+    for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        const result = await Promise.resolve(predicate(element, index, array));
+        if (result) {
+            return element;
+        }
+    }
+    return undefined;
 };
 
-
 const demo = () => {
-    const data = [-10, 2, 3, 4, 5,];
+    const data = [-10, 2, 3, 4, 5];
 
-    const isGreaterThanThree = (num) => {
+    const isLowerThanThree = (num) => {
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(num > 3);
+                resolve(num < 3);
             }, 100);
         });
     };
 
-    console.log("Finding element greater than 3...");
-    asyncFind(data, isGreaterThanThree)
+    asyncFind(data, isLowerThanThree)
         .then((result) => {
             if (result !== undefined) {
                 console.log("Found:", result);
@@ -46,6 +31,6 @@ const demo = () => {
         .catch((error) => {
             console.error("Error:", error);
         });
-}
+};
 
 demo();

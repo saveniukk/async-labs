@@ -1,12 +1,25 @@
-const asyncFind = async (array, predicate) => {
-    for (let index = 0; index < array.length; index++) {
-        const element = array[index];
-        const result = await Promise.resolve(predicate(element, index, array));
-        if (result) {
-            return element;
-        }
-    }
-    return undefined;
+const asyncFind = (array, predicate) => {
+    return new Promise((resolve, reject) => {
+        const processNext = (index) => {
+            if (index >= array.length) {
+                return resolve(undefined);
+            }
+
+            predicate(array[index], index, array)
+                .then((result) => {
+                    if (result) {
+                        resolve(array[index]);
+                    } else {
+                        processNext(index + 1);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        };
+
+        processNext(0);
+    });
 };
 
 const demo = () => {
@@ -15,12 +28,11 @@ const demo = () => {
     const isGreaterThanThree = (num) => {
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(num < 3);
+                resolve(num > 3);
             }, 100);
         });
     };
 
-    console.log("Finding element lower than 3...");
     asyncFind(data, isGreaterThanThree)
         .then((result) => {
             if (result !== undefined) {

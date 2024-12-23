@@ -50,7 +50,6 @@ const demo = () => {
         });
     };
 
-    console.log("Finding element greater than 3...");
     asyncFind(data, isGreaterThanThree, signal)
         .then((result) => {
             if (result !== undefined) {
